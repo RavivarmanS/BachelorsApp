@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459163704308",
+    "project_id": "bachelorsapp-8c834",
+    "storage_bucket": "bachelorsapp-8c834.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459163704308:android:c3d6a3c369700f196077a1",
+        "android_client_info": {
+          "package_name": "com.example.bachelorapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD46DosIASOTuaPO0eqXoivVL7br0FH6WA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
