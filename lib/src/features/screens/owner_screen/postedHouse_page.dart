@@ -1,30 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import 'owner_form.dart';
-
-class OwnerScreen extends StatelessWidget {
+class MyPostedHousesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Houses'),
-        centerTitle: true,
+        title: Text('My Posted Houses'),
       ),
       body: MyPostedHousesList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(()=>OwnerForm());
-        },
-        child: const Icon(Icons.add),
-      ),
     );
-
   }
-
 }
 
 class MyPostedHousesList extends StatelessWidget {
@@ -66,4 +53,3 @@ class MyPostedHousesList extends StatelessWidget {
     );
   }
 }
-

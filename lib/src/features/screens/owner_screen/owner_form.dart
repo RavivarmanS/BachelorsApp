@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OwnerForm extends StatelessWidget {
   const OwnerForm({Key? key});
@@ -21,10 +23,8 @@ class HouseInfoForm extends StatefulWidget {
 }
 
 class _HouseInfoFormState extends State<HouseInfoForm> {
-  List<XFile> _hallImages = [];
-  List<XFile> _bedroomImages = [];
-  List<XFile> _kitchenImages = [];
-  List<XFile> _viewImages = [];
+  List<XFile> _houseImages = [];
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _bhkController = TextEditingController();
@@ -32,11 +32,13 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
   TextEditingController _advanceController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _houseController = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
 
   bool _bikeParking = false;
   bool _carParking = false;
   bool _noParking = false;
   double _uploadProgress = 0.0;
+
   Future<void> _pickImage(List<XFile> images) async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -48,10 +50,10 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
 
   Future<List<String>> _uploadImages() async {
     List<String> downloadUrls = [];
-    int totalFiles = _hallImages.length + _bedroomImages.length + _kitchenImages.length + _viewImages.length;
+    int totalFiles = _houseImages.length;
     int filesUploaded = 0;
 
-    for (var imageList in [_hallImages, _bedroomImages, _kitchenImages, _viewImages]) {
+    for (var imageList in [_houseImages]) {
       for (var image in imageList) {
         File file = File(image.path);
         firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref('house_images/${image.name}');
@@ -75,6 +77,7 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
     }
     return downloadUrls;
   }
+
   void _resetForm() {
     _houseController.clear();
     _addressController.clear();
@@ -82,20 +85,21 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
     _rentController.clear();
     _advanceController.clear();
     _phoneController.clear();
+    _locationController.clear();
     setState(() {
-      _hallImages.clear();
-      _bedroomImages.clear();
-      _kitchenImages.clear();
-      _viewImages.clear();
+      _houseImages.clear();
     });
-    _viewImages.clear();
     _bikeParking=false;
     _carParking=false;
     _noParking=false;
   }
+
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
+        // Get the current user ID
+        String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
         // Reset upload progress
         setState(() {
           _uploadProgress = 0.0;
@@ -109,16 +113,15 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
           'houseName': _houseController.text,
           'address': _addressController.text,
           'bhk': _bhkController.text,
+          'location': _locationController.text,
           'bikeParking': _bikeParking,
           'carParking': _carParking,
           'noParking': _noParking,
           'rentAmount': _rentController.text,
           'advanceAmount': _advanceController.text,
           'phoneNumber': _phoneController.text,
-          'hallImages': downloadUrls[0],
-          'bedroomImages': downloadUrls[1],
-          'kitchenImages': downloadUrls[2],
-          'viewImages': downloadUrls[3],
+          'houseImages': downloadUrls, // Store list of image URLs
+          'ownerId': currentUserId, // Include the current user ID
         };
 
         // Add the data to Firestore
@@ -166,7 +169,6 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,6 +197,16 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the address';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _locationController,
+                decoration: InputDecoration(labelText: 'Location'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the location';
                   }
                   return null;
                 },
@@ -271,16 +283,8 @@ class _HouseInfoFormState extends State<HouseInfoForm> {
                 },
               ),
               SizedBox(height: 20),
-
-              _buildImagePickerButton('Hall', _hallImages),
+              _buildImagePickerButton('House', _houseImages),
               SizedBox(height: 16.0),
-              _buildImagePickerButton('Bedroom ', _bedroomImages),
-              SizedBox(height: 16.0),
-              _buildImagePickerButton('Kitchen', _kitchenImages),
-              SizedBox(height: 16.0),
-              _buildImagePickerButton('Front View', _viewImages),
-
-              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Submit'),

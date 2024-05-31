@@ -54,6 +54,10 @@ class LoginForm extends StatelessWidget {
           SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black45
+                  ),
+                ),
                   onPressed: () {
                     Get.to(() => Dashboard());
                   }, child: Text(login.toUpperCase())))

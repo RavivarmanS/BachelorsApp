@@ -1,6 +1,6 @@
+import 'package:bachelorapp/src/features/authentication/login_or_register.dart';
 import 'package:bachelorapp/src/features/core/screens/dashboards/dashboard.dart';
 import 'package:bachelorapp/src/features/repository/authentication_repository/exception/signup_email_password_failure.dart';
-import 'package:bachelorapp/src/features/screens/welcome_screen/welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,7 @@ class AuthenticationRepository extends GetxController {
   }
 
   _setInitialScreen(User? user) {
-    user == null ? Get.offAll(() => const WelcomeScreen()) : Get.offAll(() => const Dashboard());
+    user == null ? Get.offAll(() => const LoginOrRegister()) : Get.offAll(() => const Dashboard());
   }
 
   Future<void> phoneAuthentication(String phoneNo) async {
@@ -52,7 +52,7 @@ class AuthenticationRepository extends GetxController {
   Future<void> createUserWithEmailAndPassword(String email,String password) async{
     try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      firebaseUser.value !=null ? Get.offAll(() => const Dashboard()) : Get.to(() => WelcomeScreen());
+      firebaseUser.value !=null ? Get.offAll(() => const Dashboard()) : Get.to(() => LoginOrRegister());
     } on FirebaseAuthException catch(e){
       final ex= SignUpWithEmailAndPasswordFailure.code(e.code);
       print("FIREBASE AUTH EXCEPTION - ${ex.message}");

@@ -8,7 +8,7 @@ const String welcomeTitle = "Welcome To Unite Bachelors";
 const String welcomeSubTitle = "Please Login to continue";
 
 const String login = 'Login';
-const String signUp = 'Sing Up';
+const String signUp = 'Sign Up';
 
 const String LoginTitle = "Welcome back";
 const String Email = "Email";
@@ -48,3 +48,12 @@ const String DashBoardSearch = "Search...";
 const String tenent = "Tenent";
 const String owner = "Owner";
 const String houseDetails = "Your Properties...";
+const String welcomeBack = "Welcome back, you've been missed!";
+const String services = "Services";
+
+const String HomeFood = "Home Food";
+const String BikeRental = "Bike Rental";
+const String laundry = "Laundry";
+const String groceries = "Groceries";
+const String plumber = "Plumber";
+const String electrician = "Electrician";

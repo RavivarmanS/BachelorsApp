@@ -1,5 +1,5 @@
-class HouseForRent {
-  final String id;
+class HouseRent {
+
   final String houseName;
   final String address;
   final String location;
@@ -11,10 +11,10 @@ class HouseForRent {
   final String advanceAmount;
   final String phoneNumber;
   final List<String> imageUrls;
-  final double rating; // Add this field
+   // Add this field
 
-  HouseForRent({
-    required this.id,
+  HouseRent({
+
     required this.houseName,
     required this.address,
     required this.location,
@@ -26,6 +26,6 @@ class HouseForRent {
     required this.advanceAmount,
     required this.phoneNumber,
     required this.imageUrls,
-    required this.rating, // Add this field
+    // Add this field
   });
 }
